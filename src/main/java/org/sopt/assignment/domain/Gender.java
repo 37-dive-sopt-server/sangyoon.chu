@@ -1,5 +1,8 @@
 package org.sopt.assignment.domain;
 
+import org.sopt.assignment.exception.BaseException;
+import org.sopt.assignment.exception.ErrorCode;
+
 public enum Gender {
     MALE("남자"), FEMALE("여자");
 
@@ -8,6 +11,14 @@ public enum Gender {
     }
 
     private final String description;
+
+    public static Gender fromInput(String input){
+        return switch (input){
+            case "1" -> MALE;
+            case "2" -> FEMALE;
+            default -> throw BaseException.type(ErrorCode.INVALID_GENDER);
+        };
+    }
 
     public String getDescription() {
         return description;

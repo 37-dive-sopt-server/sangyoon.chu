@@ -3,7 +3,7 @@ package org.sopt.assignment;
 import org.sopt.assignment.controller.MemberController;
 import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.exception.BaseException;
-import org.sopt.assignment.exception.ErrorCode;
+import org.sopt.assignment.exception.ExceptionHandler;
 import org.sopt.assignment.repository.MemoryMemberRepository;
 import org.sopt.assignment.service.MemberServiceImpl;
 import org.sopt.assignment.validator.MemberInputValidator;
@@ -76,15 +76,13 @@ public class AssignmentApplication {
 
             System.out.println("등록할 성별을 입력해주세요 (남성은 1번 여성은 2번 입니다.)");
             String userGender = scanner.nextLine();
-            Gender gender = parseGender(userGender);
+            Gender gender = Gender.fromInput(userGender);
 
             Long createdId = memberController.createMember(name, email, birthday, gender);
             System.out.println("✅ 회원 등록 완료 (ID: " + createdId + ")");
 
-        } catch (BaseException e) {
-            System.out.println(e.getMessage());
-        } catch (DateTimeParseException e) {
-            System.out.println("❌ 잘못된 날짜 형식입니다. yyyy-MM-dd 형식으로 입력해주세요.");
+        } catch (BaseException | DateTimeParseException e) {
+            ExceptionHandler.handle(e);
         }
     }
 
@@ -98,11 +96,9 @@ public class AssignmentApplication {
                     " | 📧: " + member.getEmail() +
                     " | 🎂: " + member.getBirthday() +
                     " | 👥: " + member.getGender().getDescription());
-            } catch (BaseException e) {
-                System.out.println(e.getMessage());
-            } catch (NumberFormatException e) {
-            System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
-        }
+            } catch (BaseException | NumberFormatException e) {
+                ExceptionHandler.handle(e);
+            }
     }
 
     private static void displayAllMembers(MemberController memberController) {
@@ -128,16 +124,8 @@ public class AssignmentApplication {
             Long id = Long.parseLong(scanner.nextLine());
             String deletedName = memberController.deleteMember(id);
             System.out.println("✅ " + deletedName + "님의 회원 정보가 삭제되었습니다.");
-        } catch (NumberFormatException e) {
-            System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
+        } catch (NumberFormatException | BaseException e) {
+            ExceptionHandler.handle(e);
         }
-    }
-
-    private static Gender parseGender(String input) {
-        return switch (input) {
-            case "1" -> Gender.MALE;
-            case "2" -> Gender.FEMALE;
-            default -> throw BaseException.type(ErrorCode.INVALID_GENDER);
-        };
     }
 }
