@@ -11,7 +11,11 @@ import java.util.Optional;
 
 public class MemberController {
 
-    private final MemberService memberService = new MemberServiceImpl();
+    private final MemberService memberService;
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
 
     public Long createMember(String name, String email, LocalDate birthday, Gender gender) {
         return memberService.join(name, email, birthday, gender);
@@ -23,10 +27,6 @@ public class MemberController {
 
     public List<Member> getAllMembers() {
         return memberService.findAllMembers();
-    }
-
-    public boolean existsMemberByEmail(String email) {
-        return memberService.existsMemberByEmail(email);
     }
 
     public String deleteMember(Long memberId){

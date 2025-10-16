@@ -17,7 +17,6 @@ public class MemoryMemberRepository {
 
     }
 
-
     public Optional<Member> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
