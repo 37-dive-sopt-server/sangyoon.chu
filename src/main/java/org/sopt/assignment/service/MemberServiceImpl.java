@@ -9,7 +9,6 @@ import org.sopt.assignment.util.IdGenerator;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -24,6 +23,8 @@ public class MemberServiceImpl implements MemberService {
         if(existsMemberByEmail(email)){
             throw BaseException.type(ErrorCode.NOT_DUPLICATED_EMAIL);
         }
+
+        Member.validateCreation(name, email, birthday, gender);
 
         Long id = IdGenerator.generateMemberId();
         Member member = Member.create(id, name, email, birthday, gender);

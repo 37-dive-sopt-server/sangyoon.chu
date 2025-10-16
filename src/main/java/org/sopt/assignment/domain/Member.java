@@ -8,7 +8,6 @@ import java.time.Period;
 
 public class Member {
     private static final int MINIMUM_AGE = 20;
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@(.+)$";
 
     private final Long id;
     private final String name;
@@ -26,7 +25,15 @@ public class Member {
         this.gender = gender;
     }
 
-    private void validateAge(LocalDate birthday) {
+    public static Member create(Long id, String name, String email, LocalDate birthday, Gender gender){
+        return new Member(id, name, email, birthday, gender);
+    }
+
+    public static void validateCreation(String name, String email, LocalDate birthday, Gender gender) {
+        validateAge(birthday);
+    }
+
+    private static void validateAge(LocalDate birthday) {
         if (birthday.isAfter(LocalDate.now())) {
             throw BaseException.type(ErrorCode.NOT_ALLOWED_FUTURE_BIRTHDAY);
         }
@@ -37,7 +44,7 @@ public class Member {
         }
     }
 
-    public int calculateAge(LocalDate birthday) {
+    private static int calculateAge(LocalDate birthday) {
         return Period.between(birthday, LocalDate.now()).getYears();
     }
 
@@ -59,9 +66,5 @@ public class Member {
 
     public Gender getGender() {
         return gender;
-    }
-
-    public static Member create(Long id, String name, String email, LocalDate birthday, Gender gender){
-        return new  Member(id, name, email, birthday, gender);
     }
 }
