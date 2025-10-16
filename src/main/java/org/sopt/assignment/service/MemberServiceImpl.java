@@ -4,7 +4,7 @@ import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.domain.Member;
 import org.sopt.assignment.exception.BaseException;
 import org.sopt.assignment.exception.ErrorCode;
-import org.sopt.assignment.repository.MemoryMemberRepository;
+import org.sopt.assignment.repository.MemberRepository;
 import org.sopt.assignment.util.IdGenerator;
 
 import java.time.LocalDate;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class MemberServiceImpl implements MemberService {
 
-    private final MemoryMemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    public MemberServiceImpl(MemoryMemberRepository memberRepository) {
+    public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 

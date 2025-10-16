@@ -38,4 +38,8 @@ public class InputHandler {
         System.out.print("해당하는 회원 ID를 입력하세요: ");
         return scanner.nextLine();
     }
+
+    public void close(){
+        scanner.close();
+    }
 }

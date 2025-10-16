@@ -2,31 +2,28 @@ package org.sopt.assignment;
 
 import org.sopt.assignment.Handler.InputHandler;
 import org.sopt.assignment.Handler.OutputHandler;
+import org.sopt.assignment.config.AppConfig;
 import org.sopt.assignment.controller.MemberController;
 import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.exception.BaseException;
 import org.sopt.assignment.exception.ErrorCode;
 import org.sopt.assignment.exception.ExceptionHandler;
-import org.sopt.assignment.repository.MemoryMemberRepository;
-import org.sopt.assignment.service.MemberServiceImpl;
 import org.sopt.assignment.validator.MemberInputValidator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 @SpringBootApplication
 public class AssignmentApplication {
 
     public static void main(String[] args) {
 
-        MemoryMemberRepository repository = new MemoryMemberRepository();
-        MemberServiceImpl memberService = new MemberServiceImpl(repository);
-        MemberController memberController = new MemberController(memberService);
-        Scanner scanner = new Scanner(System.in);
-        InputHandler inputHandler = new InputHandler(scanner);
-        OutputHandler outputHandler = new OutputHandler();
+        AppConfig appConfig = new AppConfig();
+
+        MemberController memberController = appConfig.memberController();
+        InputHandler inputHandler = appConfig.inputHandler();
+        OutputHandler outputHandler = appConfig.outputHandler();
 
         while (true) {
          try {
@@ -48,7 +45,7 @@ public class AssignmentApplication {
                      break;
                  case "5":
                      outputHandler.displayQuitMenu();
-                     scanner.close();
+                     inputHandler.close();
                      return;
                  default:
                      throw BaseException.type(ErrorCode.INVALID_MENU_NUMBER);
