@@ -92,19 +92,15 @@ public class AssignmentApplication {
         System.out.print("조회할 회원 ID를 입력하세요: ");
         try {
             Long id = Long.parseLong(scanner.nextLine());
-            var foundMember = memberController.findMemberById(id);
-
-            if (foundMember.isPresent()) {
-                var member = foundMember.get();
-                System.out.println("✅ 조회된 회원: ID: " + member.getId() +
-                        " | 이름: " + member.getName() +
-                        " | 📧: " + member.getEmail() +
-                        " | 🎂: " + member.getBirthday() +
-                        " | 👥: " + member.getGender().getDescription());
-            } else {
-                System.out.println("⚠️ 해당 ID의 회원을 찾을 수 없습니다.");
-            }
-        } catch (NumberFormatException e) {
+            var member = memberController.findMemberById(id);
+            System.out.println("✅ 조회된 회원: ID: " + member.getId() +
+                    " | 이름: " + member.getName() +
+                    " | 📧: " + member.getEmail() +
+                    " | 🎂: " + member.getBirthday() +
+                    " | 👥: " + member.getGender().getDescription());
+            } catch (BaseException e) {
+                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
             System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
         }
     }

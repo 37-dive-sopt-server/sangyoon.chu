@@ -21,7 +21,7 @@ public class MemberController {
         return memberService.join(name, email, birthday, gender);
     }
 
-    public Optional<Member> findMemberById(Long id) {
+    public Member findMemberById(Long id) {
         return memberService.findOne(id);
     }
 

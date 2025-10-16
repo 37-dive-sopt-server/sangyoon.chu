@@ -32,18 +32,23 @@ public class MemberServiceImpl implements MemberService {
         return member.getId();
     }
 
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> BaseException.type(ErrorCode.NOT_FOUND_MEMBER));
     }
 
     public List<Member> findAllMembers() {
         return memberRepository.findAll();
     }
 
+    public String delete(Long memberId) {
+
+        Member member = findOne(memberId);
+
+        return memberRepository.delete(memberId);
+    }
+
     private boolean existsMemberByEmail(String email) {
         return memberRepository.existsMemberByEmail(email); }
 
-    public String delete(Long memberId) {
-        return memberRepository.delete(memberId);
-    }
 }

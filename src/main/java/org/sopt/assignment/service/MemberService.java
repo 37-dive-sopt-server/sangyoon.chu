@@ -11,7 +11,7 @@ public interface MemberService {
 
     Long join(String name, String email, LocalDate birthday, Gender gender);
 
-    Optional<Member> findOne(Long memberId);
+    Member findOne(Long memberId);
 
     List<Member> findAllMembers();
 
