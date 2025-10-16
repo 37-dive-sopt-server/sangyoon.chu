@@ -1,15 +1,19 @@
 package org.sopt.assignment.service;
 
+import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.domain.Member;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
 
-    Long join(String name);
+    Long join(String name, String email, LocalDate birthday, Gender gender);
 
     Optional<Member> findOne(Long memberId);
 
     List<Member> findAllMembers();
+
+    boolean existsMemberByEmail(String email);
 }

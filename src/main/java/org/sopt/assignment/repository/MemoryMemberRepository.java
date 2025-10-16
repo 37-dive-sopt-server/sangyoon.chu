@@ -26,4 +26,8 @@ public class MemoryMemberRepository {
     public List<Member> findAll() {
         return new ArrayList<>(store.values());
     }
-}
+
+    public boolean existsMemberByEmail(String email) {
+        return store.values().stream()
+                .anyMatch(member -> member.getEmail().equals(email));
+    }}
