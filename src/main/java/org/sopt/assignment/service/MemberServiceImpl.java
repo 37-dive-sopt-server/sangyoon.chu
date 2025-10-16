@@ -29,4 +29,8 @@ public class MemberServiceImpl implements MemberService {
 
     public boolean existsMemberByEmail(String email) {
         return memberRepository.existsMemberByEmail(email); }
+
+    public String delete(Long memberId) {
+        return memberRepository.delete(memberId);
+    }
 }

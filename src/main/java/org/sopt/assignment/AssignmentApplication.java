@@ -122,6 +122,22 @@ public class AssignmentApplication {
                     }
                     break;
                 case "4":
+                    System.out.print("삭제할 회원 ID를 입력하세요: ");
+                    try {
+                        Long id = Long.parseLong(scanner.nextLine());
+                        Optional<Member> foundMember = memberController.findMemberById(id);
+                        if (foundMember.isPresent()) {
+                            String deleteName = memberController.deleteMember(id);
+                            System.out.println("✅ " + deleteName + "  회원을 삭제했습니다.");
+                        }
+                        else {
+                            System.out.println("⚠️ 해당 ID의 회원을 찾을 수 없습니다.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("❌ 유효하지 않은 ID 형식입니다. 숫자를 입력해주세요.");
+                    }
+                    break;
+
                 case "5":
                     System.out.println("👋 서비스를 종료합니다. 안녕히 계세요!");
                     scanner.close();

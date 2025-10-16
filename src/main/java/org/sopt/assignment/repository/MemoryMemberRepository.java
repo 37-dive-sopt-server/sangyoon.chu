@@ -30,4 +30,11 @@ public class MemoryMemberRepository {
     public boolean existsMemberByEmail(String email) {
         return store.values().stream()
                 .anyMatch(member -> member.getEmail().equals(email));
-    }}
+    }
+
+    public String delete(Long memberId) {
+        Member removedMember = store.remove(memberId);
+        return removedMember.getName();
+    }
+}
+

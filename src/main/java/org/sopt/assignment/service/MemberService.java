@@ -16,4 +16,6 @@ public interface MemberService {
     List<Member> findAllMembers();
 
     boolean existsMemberByEmail(String email);
+
+    String delete(Long memberId);
 }

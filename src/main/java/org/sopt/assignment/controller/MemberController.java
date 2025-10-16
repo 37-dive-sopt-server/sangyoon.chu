@@ -2,6 +2,7 @@ package org.sopt.assignment.controller;
 
 import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.service.MemberService;
 import org.sopt.assignment.service.MemberServiceImpl;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public class MemberController {
 
-    private final MemberServiceImpl memberService = new MemberServiceImpl();
+    private final MemberService memberService = new MemberServiceImpl();
 
     public Long createMember(String name, String email, LocalDate birthday, Gender gender) {
         return memberService.join(name, email, birthday, gender);
@@ -26,5 +27,9 @@ public class MemberController {
 
     public boolean existsMemberByEmail(String email) {
         return memberService.existsMemberByEmail(email);
+    }
+
+    public String deleteMember(Long memberId){
+        return memberService.delete(memberId);
     }
 }
