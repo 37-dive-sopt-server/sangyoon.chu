@@ -6,10 +6,13 @@ import org.sopt.assignment.exception.BaseException;
 import org.sopt.assignment.exception.ErrorCode;
 import org.sopt.assignment.repository.MemberRepository;
 import org.sopt.assignment.util.IdGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
