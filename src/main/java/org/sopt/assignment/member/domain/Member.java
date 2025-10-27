@@ -1,7 +1,7 @@
 package org.sopt.assignment.member.domain;
 
 import org.sopt.assignment.global.util.exception.BaseException;
-import org.sopt.assignment.global.util.exception.ErrorCode;
+import org.sopt.assignment.member.exception.MemberErrorCode;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -37,32 +37,32 @@ public class Member {
 
     private static void validateBirthday(LocalDate birthday) {
         if (birthday == null) {
-            throw BaseException.type(ErrorCode.NOT_EMPTY_BIRTHDAY);
+            throw BaseException.type(MemberErrorCode.NOT_EMPTY_BIRTHDAY);
         }
 
         if (birthday.isAfter(LocalDate.now())) {
-            throw BaseException.type(ErrorCode.NOT_ALLOWED_FUTURE_BIRTHDAY);
+            throw BaseException.type(MemberErrorCode.NOT_ALLOWED_FUTURE_BIRTHDAY);
         }
 
         int age = calculateAge(birthday);
         if (age < MINIMUM_AGE) {
-            throw BaseException.type(ErrorCode.NOT_ALLOWED_AGE_UNDER_TWENTY);
+            throw BaseException.type(MemberErrorCode.NOT_ALLOWED_AGE_UNDER_TWENTY);
         }
     }
 
     private static void validateName(String name){
         if (name == null || name.isEmpty()) {
-            throw BaseException.type(ErrorCode.NOT_EMPTY_NAME);
+            throw BaseException.type(MemberErrorCode.NOT_EMPTY_NAME);
         }
     }
 
     private static void validateEmail(String email){
         if (email == null || email.isEmpty()) {
-            throw BaseException.type(ErrorCode.NOT_EMPTY_EMAIL);
+            throw BaseException.type(MemberErrorCode.NOT_EMPTY_EMAIL);
         }
 
         if (!EMAIL_PATTERN.matcher(email).matches()) {
-            throw BaseException.type(ErrorCode.INVALID_EMAIL);
+            throw BaseException.type(MemberErrorCode.INVALID_EMAIL);
         }
     }
 

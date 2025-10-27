@@ -6,7 +6,7 @@ import org.sopt.assignment.member.dto.request.CreateMemberRequestDto;
 import org.sopt.assignment.member.dto.response.MemberResponseDto;
 import org.sopt.assignment.member.dto.response.GetAllMembersResponseDto;
 import org.sopt.assignment.global.util.exception.BaseException;
-import org.sopt.assignment.global.util.exception.ErrorCode;
+import org.sopt.assignment.member.exception.MemberErrorCode;
 import org.sopt.assignment.member.repository.MemberRepository;
 import org.sopt.assignment.global.util.IdGenerator;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
         if(existsMemberByEmail(request.email())){
             log.warn("중복된 이메일 입니다: {}", maskEmail(request.email()));
-            throw BaseException.type(ErrorCode.NOT_DUPLICATED_EMAIL);
+            throw BaseException.type(MemberErrorCode.NOT_DUPLICATED_EMAIL);
         }
 
         Member.validateCreation(request.name(), request.email(), request.birthday(), request.gender());
@@ -86,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
             return memberRepository.findById(memberId)
                     .orElseThrow(() -> {
                         log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
-                        return BaseException.type(ErrorCode.NOT_FOUND_MEMBER);
+                        return BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER);
                     });
     }
 }
