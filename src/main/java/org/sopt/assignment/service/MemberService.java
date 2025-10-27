@@ -1,19 +1,16 @@
 package org.sopt.assignment.service;
 
-import org.sopt.assignment.domain.Gender;
-import org.sopt.assignment.domain.Member;
 import org.sopt.assignment.dto.request.CreateMemberRequestDto;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.sopt.assignment.dto.response.MemberResponseDto;
+import org.sopt.assignment.dto.response.GetAllMembersResponseDto;
 
 public interface MemberService {
 
-    Long join(CreateMemberRequestDto request);
+    MemberResponseDto join(CreateMemberRequestDto request);
 
-    Member findOne(Long memberId);
+    MemberResponseDto findMember(Long memberId);
 
-    List<Member> findAllMembers();
+    GetAllMembersResponseDto getAllMembers();
 
-    String delete(Long memberId);
+    MemberResponseDto deleteMember(Long memberId);
 }
