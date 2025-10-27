@@ -1,5 +1,6 @@
 package org.sopt.assignment.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.domain.Member;
 import org.sopt.assignment.dto.request.CreateMemberRequestDto;
 import org.sopt.assignment.dto.response.MemberResponseDto;
@@ -10,7 +11,10 @@ import org.sopt.assignment.repository.MemberRepository;
 import org.sopt.assignment.util.IdGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -21,7 +25,10 @@ public class MemberServiceImpl implements MemberService {
 
     public MemberResponseDto join(CreateMemberRequestDto request) {
 
+        log.info("회원가입 프로세스 시작 - email: {}", maskEmail(request.email()));
+
         if(existsMemberByEmail(request.email())){
+            log.warn("중복된 이메일 입니다: {}", maskEmail(request.email()));
             throw BaseException.type(ErrorCode.NOT_DUPLICATED_EMAIL);
         }
 
@@ -31,33 +38,55 @@ public class MemberServiceImpl implements MemberService {
         Member member = Member.create(id, request.name(), request.email(), request.birthday(), request.gender());
 
         memberRepository.save(member);
+        log.info("회원 가입 완료 - memberId: {}, email: {}", id, maskEmail(request.email()));
 
         return MemberResponseDto.from(member);
     }
 
     public MemberResponseDto findMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                            .orElseThrow(() -> BaseException.type(ErrorCode.NOT_FOUND_MEMBER));
+
+        Member member = getMemberById(memberId);
 
         return MemberResponseDto.from(member);
     }
 
     public GetAllMembersResponseDto getAllMembers() {
-        return GetAllMembersResponseDto.from(memberRepository.findAll().stream()
+        log.info("회원 전체 조회 프로세스 시작");
+
+        List<Member> members = memberRepository.findAll();
+        log.info("회원 전체 조회 완료 - 총 {}명", members.size());
+        return GetAllMembersResponseDto.from(members.stream()
                 .map(MemberResponseDto::from).toList());
     }
 
     public MemberResponseDto deleteMember(Long memberId) {
+        log.info("회원 삭제 프로세스 시작 - memberId: {}", memberId);
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> BaseException.type(ErrorCode.NOT_FOUND_MEMBER));
+        Member member = getMemberById(memberId);
 
         memberRepository.delete(memberId);
 
+        log.info("회원 삭제 완료 - memberId: {}", memberId);
         return MemberResponseDto.from(member);
     }
 
     private boolean existsMemberByEmail(String email) {
-        return memberRepository.existsMemberByEmail(email); }
+        return memberRepository.existsMemberByEmail(email);
+    }
 
+    private String maskEmail(String email) {
+        if (email == null || email.length() < 3) return "***";
+        int atIndex = email.indexOf('@');
+        if (atIndex <= 0) return "***";
+
+        return email.charAt(0) + "***" + email.substring(atIndex);
+    }
+
+    private Member getMemberById(Long memberId) {
+            return memberRepository.findById(memberId)
+                    .orElseThrow(() -> {
+                        log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
+                        return BaseException.type(ErrorCode.NOT_FOUND_MEMBER);
+                    });
+    }
 }
