@@ -1,6 +1,6 @@
 package org.sopt.assignment.member.domain;
 
-import org.sopt.assignment.global.util.exception.BaseException;
+import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 
 public enum Gender {

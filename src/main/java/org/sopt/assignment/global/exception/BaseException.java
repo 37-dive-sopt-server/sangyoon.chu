@@ -1,4 +1,4 @@
-package org.sopt.assignment.global.util.exception;
+package org.sopt.assignment.global.exception;
 
 public class BaseException extends RuntimeException {
 
