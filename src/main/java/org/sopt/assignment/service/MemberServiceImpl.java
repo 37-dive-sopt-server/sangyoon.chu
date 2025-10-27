@@ -2,6 +2,7 @@ package org.sopt.assignment.service;
 
 import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.dto.request.CreateMemberRequestDto;
 import org.sopt.assignment.exception.BaseException;
 import org.sopt.assignment.exception.ErrorCode;
 import org.sopt.assignment.repository.MemberRepository;
@@ -21,16 +22,16 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(String name, String email, LocalDate birthday, Gender gender) {
+    public Long join(CreateMemberRequestDto request) {
 
-        if(existsMemberByEmail(email)){
+        if(existsMemberByEmail(request.email())){
             throw BaseException.type(ErrorCode.NOT_DUPLICATED_EMAIL);
         }
 
-        Member.validateCreation(name, email, birthday, gender);
+        Member.validateCreation(request.name(), request.email(), request.birthday(), request.gender());
 
         Long id = IdGenerator.generateMemberId();
-        Member member = Member.create(id, name, email, birthday, gender);
+        Member member = Member.create(id, request.name(), request.email(), request.birthday(), request.gender());
 
         memberRepository.save(member);
         return member.getId();

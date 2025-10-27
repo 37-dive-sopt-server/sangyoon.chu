@@ -1,16 +1,11 @@
 package org.sopt.assignment.controller;
 
-import org.sopt.assignment.domain.Gender;
 import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.dto.request.CreateMemberRequestDto;
 import org.sopt.assignment.service.MemberService;
-import org.sopt.assignment.service.MemberServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class MemberController {
@@ -21,21 +16,22 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/users")
-    public Long createMember(String name, String email, LocalDate birthday, Gender gender) {
-        return memberService.join(name, email, birthday, gender);
+    @PostMapping("/members")
+    public Long createMember(@RequestBody CreateMemberRequestDto request) {
+        return memberService.join(request);
     }
 
-    @GetMapping("/users")
-    public Member findMemberById(Long id) {
-        return memberService.findOne(id);
+    @GetMapping("/members/{memberId}")
+    public Member findMemberById(@PathVariable Long memberId) {
+        return memberService.findOne(memberId);
     }
 
-    @GetMapping("/users/all")
+    @GetMapping("/members/all")
     public List<Member> getAllMembers() {
         return memberService.findAllMembers();
     }
 
+    @DeleteMapping("/members/{memberId}")
     public String deleteMember(Long memberId){
         return memberService.delete(memberId);
     }
