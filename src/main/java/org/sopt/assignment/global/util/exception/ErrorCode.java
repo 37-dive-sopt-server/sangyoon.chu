@@ -1,4 +1,4 @@
-package org.sopt.assignment.exception;
+package org.sopt.assignment.global.util.exception;
 
 public enum ErrorCode {
     NOT_EMPTY_NAME("ERROR1", "⚠️ 이름은 필수 입력값입니다."),

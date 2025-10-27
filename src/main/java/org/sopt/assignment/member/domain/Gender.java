@@ -1,7 +1,7 @@
-package org.sopt.assignment.domain;
+package org.sopt.assignment.member.domain;
 
-import org.sopt.assignment.exception.BaseException;
-import org.sopt.assignment.exception.ErrorCode;
+import org.sopt.assignment.global.util.exception.BaseException;
+import org.sopt.assignment.global.util.exception.ErrorCode;
 
 public enum Gender {
     MALE("남자"), FEMALE("여자");

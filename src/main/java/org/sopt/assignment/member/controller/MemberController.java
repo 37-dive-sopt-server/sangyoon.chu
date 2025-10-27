@@ -1,9 +1,9 @@
-package org.sopt.assignment.controller;
+package org.sopt.assignment.member.controller;
 
-import org.sopt.assignment.dto.request.CreateMemberRequestDto;
-import org.sopt.assignment.dto.response.MemberResponseDto;
-import org.sopt.assignment.dto.response.GetAllMembersResponseDto;
-import org.sopt.assignment.service.MemberService;
+import org.sopt.assignment.member.dto.request.CreateMemberRequestDto;
+import org.sopt.assignment.member.dto.response.MemberResponseDto;
+import org.sopt.assignment.member.dto.response.GetAllMembersResponseDto;
+import org.sopt.assignment.member.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

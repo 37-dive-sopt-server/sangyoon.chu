@@ -1,4 +1,4 @@
-package org.sopt.assignment.dto.response;
+package org.sopt.assignment.member.dto.response;
 
 import java.util.List;
 

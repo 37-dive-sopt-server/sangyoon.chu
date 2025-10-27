@@ -1,6 +1,6 @@
-package org.sopt.assignment.repository;
+package org.sopt.assignment.member.repository;
 
-import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.member.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

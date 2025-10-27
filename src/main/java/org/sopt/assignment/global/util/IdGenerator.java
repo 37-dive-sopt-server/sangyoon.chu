@@ -1,4 +1,4 @@
-package org.sopt.assignment.util;
+package org.sopt.assignment.global.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 

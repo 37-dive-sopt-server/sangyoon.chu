@@ -1,6 +1,6 @@
-package org.sopt.assignment.repository;
+package org.sopt.assignment.member.repository;
 
-import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.member.domain.Member;
 
 import java.util.List;
 import java.util.Optional;

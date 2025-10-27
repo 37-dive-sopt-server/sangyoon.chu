@@ -1,14 +1,14 @@
-package org.sopt.assignment.service;
+package org.sopt.assignment.member.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.assignment.domain.Member;
-import org.sopt.assignment.dto.request.CreateMemberRequestDto;
-import org.sopt.assignment.dto.response.MemberResponseDto;
-import org.sopt.assignment.dto.response.GetAllMembersResponseDto;
-import org.sopt.assignment.exception.BaseException;
-import org.sopt.assignment.exception.ErrorCode;
-import org.sopt.assignment.repository.MemberRepository;
-import org.sopt.assignment.util.IdGenerator;
+import org.sopt.assignment.member.domain.Member;
+import org.sopt.assignment.member.dto.request.CreateMemberRequestDto;
+import org.sopt.assignment.member.dto.response.MemberResponseDto;
+import org.sopt.assignment.member.dto.response.GetAllMembersResponseDto;
+import org.sopt.assignment.global.util.exception.BaseException;
+import org.sopt.assignment.global.util.exception.ErrorCode;
+import org.sopt.assignment.member.repository.MemberRepository;
+import org.sopt.assignment.global.util.IdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

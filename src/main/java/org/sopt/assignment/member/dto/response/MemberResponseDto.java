@@ -1,9 +1,9 @@
-package org.sopt.assignment.dto.response;
+package org.sopt.assignment.member.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.assignment.domain.Gender;
-import org.sopt.assignment.domain.Member;
+import org.sopt.assignment.member.domain.Gender;
+import org.sopt.assignment.member.domain.Member;
 
 import java.time.LocalDate;
 

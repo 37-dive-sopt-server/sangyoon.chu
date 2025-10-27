@@ -1,9 +1,9 @@
-package org.sopt.assignment.repository;
+package org.sopt.assignment.member.repository;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.sopt.assignment.domain.Member;
-import org.sopt.assignment.util.IdGenerator;
+import org.sopt.assignment.member.domain.Member;
+import org.sopt.assignment.global.util.IdGenerator;
 
 import java.io.File;
 import java.io.IOException;
