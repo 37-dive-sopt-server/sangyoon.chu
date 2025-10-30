@@ -1,22 +1,23 @@
 package org.sopt.assignment.member.service;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sopt.assignment.global.exception.BaseException;
+import org.sopt.assignment.global.util.IdGenerator;
 import org.sopt.assignment.member.domain.Member;
 import org.sopt.assignment.member.dto.request.CreateMemberRequestDto;
-import org.sopt.assignment.member.dto.response.MemberResponseDto;
 import org.sopt.assignment.member.dto.response.GetAllMembersResponseDto;
-import org.sopt.assignment.global.exception.BaseException;
+import org.sopt.assignment.member.dto.response.MemberResponseDto;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 import org.sopt.assignment.member.repository.MemberRepository;
-import org.sopt.assignment.global.util.IdGenerator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Slf4j
 public class MemberServiceImpl implements MemberService {
 
+    private static final Logger log = LoggerFactory.getLogger(MemberServiceImpl.class);
     private final MemberRepository memberRepository;
 
     public MemberServiceImpl(MemberRepository memberRepository) {

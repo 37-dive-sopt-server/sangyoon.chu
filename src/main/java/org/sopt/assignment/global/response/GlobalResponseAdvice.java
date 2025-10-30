@@ -1,6 +1,5 @@
 package org.sopt.assignment.global.response;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-@Slf4j
 @RestControllerAdvice(annotations = RestController.class)
 public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
 
@@ -44,7 +42,6 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
                 path.startsWith("/actuator") ||
                 path.contains("api-docs")) {
 
-            log.debug("시스템 경로로 판단하여 래핑 제외: {}", path);
             return body;
         }
 

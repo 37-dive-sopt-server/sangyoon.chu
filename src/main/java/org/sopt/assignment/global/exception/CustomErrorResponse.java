@@ -1,10 +1,6 @@
 package org.sopt.assignment.global.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
 public class CustomErrorResponse {
 
     private int status;
@@ -18,6 +14,9 @@ public class CustomErrorResponse {
         this.message = code.getMessage();
     }
 
+    public CustomErrorResponse(int value, String errorCode, String message) {
+    }
+
     public static CustomErrorResponse from(ErrorCode code){
         return new CustomErrorResponse(code);
     }
@@ -26,4 +25,15 @@ public class CustomErrorResponse {
         return new CustomErrorResponse(errorCode.getStatus().value(), errorCode.getErrorCode(), message);
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
