@@ -14,7 +14,10 @@ public class CustomErrorResponse {
         this.message = code.getMessage();
     }
 
-    public CustomErrorResponse(int value, String errorCode, String message) {
+    public CustomErrorResponse(int status, String errorCode, String message) {
+        this.status = status;
+        this.errorCode = errorCode;
+        this.message = message;
     }
 
     public static CustomErrorResponse from(ErrorCode code){
