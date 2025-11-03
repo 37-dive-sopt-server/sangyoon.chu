@@ -1,7 +1,7 @@
-package org.sopt.assignment.domain;
+package org.sopt.assignment.member.domain;
 
-import org.sopt.assignment.exception.BaseException;
-import org.sopt.assignment.exception.ErrorCode;
+import org.sopt.assignment.global.exception.BaseException;
+import org.sopt.assignment.member.exception.MemberErrorCode;
 
 public enum Gender {
     MALE("남자"), FEMALE("여자");
@@ -16,7 +16,7 @@ public enum Gender {
         return switch (input){
             case "1" -> MALE;
             case "2" -> FEMALE;
-            default -> throw BaseException.type(ErrorCode.INVALID_GENDER);
+            default -> throw BaseException.type(MemberErrorCode.INVALID_GENDER);
         };
     }
 
