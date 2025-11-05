@@ -1,35 +1,67 @@
 package org.sopt.assignment.member.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.regex.Pattern;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Table(name = "members")
 public class Member {
     private static final int MINIMUM_AGE = 20;
 
-    private final Long id;
-    private final String name;
-    private final String email;
-    private final LocalDate birthday;
-    private final Gender gender;
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-    private Member(Long id, String name, String email, LocalDate birthday, Gender gender) {
-        this.id = id;
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "birthday", nullable = false)
+    private LocalDate birthday;
+
+    @Column(name = "gender", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EGender gender;
+
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Member (final String name,
+                   final String email,
+                   final LocalDate birthday,
+                   final EGender gender
+                   ){
         this.name = name;
         this.email = email;
         this.birthday = birthday;
         this.gender = gender;
     }
 
-    public static Member create(Long id, String name, String email, LocalDate birthday, Gender gender){
-        return new Member(id, name, email, birthday, gender);
+
+    public static Member create(String name, String email, LocalDate birthday, EGender gender){
+        validateCreation(name, email, birthday, gender);
+        return Member.builder()
+                .name(name)
+                .email(email)
+                .birthday(birthday)
+                .gender(gender)
+                .build();
     }
 
-    public static void validateCreation(String name, String email, LocalDate birthday, Gender gender) {
+    public static void validateCreation(String name, String email, LocalDate birthday, EGender gender) {
         validateName(name);
         validateEmail(email);
         validateBirthday(birthday);
@@ -51,42 +83,22 @@ public class Member {
     }
 
     private static void validateName(String name){
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.isBlank()) {
             throw BaseException.type(MemberErrorCode.NOT_EMPTY_NAME);
         }
     }
 
     private static void validateEmail(String email){
-        if (email == null || email.isEmpty()) {
+        if (email == null || email.isBlank()) {
             throw BaseException.type(MemberErrorCode.NOT_EMPTY_EMAIL);
         }
 
-        if (!EMAIL_PATTERN.matcher(email).matches()) {
+        if (!Constants.EMAIL_PATTERN.matcher(email).matches()) {
             throw BaseException.type(MemberErrorCode.INVALID_EMAIL);
         }
     }
 
     private static int calculateAge(LocalDate birthday) {
         return Period.between(birthday, LocalDate.now()).getYears();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public Gender getGender() {
-        return gender;
     }
 }

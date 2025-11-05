@@ -2,7 +2,7 @@ package org.sopt.assignment.member.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.assignment.member.domain.Gender;
+import org.sopt.assignment.member.domain.EGender;
 
 import java.time.LocalDate;
 
@@ -24,6 +24,6 @@ public record CreateMemberRequestDto(
 
         @JsonProperty("gender")
         @Schema(description = "등록 사용자 성별(MALE or FEMALE", example = "MALE", requiredMode = REQUIRED)
-        Gender gender
+        EGender gender
 ) {
 }
