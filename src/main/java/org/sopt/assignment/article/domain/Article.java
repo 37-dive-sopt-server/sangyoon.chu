@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.assignment.article.exception.ArticleErrorCode;
+import org.sopt.assignment.global.base.BaseTimeEntity;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.member.domain.Member;
 
@@ -13,7 +14,7 @@ import org.sopt.assignment.member.domain.Member;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "articles")
-public class Article {
+public class Article extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

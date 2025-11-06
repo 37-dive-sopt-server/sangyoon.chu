@@ -71,6 +71,14 @@ public class MemberServiceImpl implements MemberService {
         return MemberResponseDto.from(member);
     }
 
+    public Member getMemberById(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
+                    return BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER);
+                });
+    }
+
     private boolean existsMemberByEmail(String email) {
         return memberRepository.existsMemberByEmail(email);
     }
@@ -83,11 +91,4 @@ public class MemberServiceImpl implements MemberService {
         return email.charAt(0) + "***" + email.substring(atIndex);
     }
 
-    private Member getMemberById(Long memberId) {
-            return memberRepository.findById(memberId)
-                    .orElseThrow(() -> {
-                        log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
-                        return BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER);
-                    });
-    }
 }

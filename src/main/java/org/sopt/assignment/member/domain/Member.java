@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.assignment.global.base.BaseTimeEntity;
 import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.member.exception.MemberErrorCode;
@@ -16,7 +17,7 @@ import java.time.Period;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "members")
-public class Member {
+public class Member extends BaseTimeEntity {
     private static final int MINIMUM_AGE = 20;
 
     @Id
