@@ -12,13 +12,16 @@ public record GetListArticleResponse(
 
         ETag tag,
 
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+
+        String memberName
 
 ) {
     public static GetListArticleResponse from(Article article){
          return new GetListArticleResponse(article.getId(),
-                article.getTitle(),
-                article.getTag(),
-                article.getCreatedAt());
+                 article.getTitle(),
+                 article.getTag(),
+                 article.getCreatedAt(),
+                 article.getMember().getName());
     }
 }
