@@ -41,14 +41,14 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public GetListArticleResponseDto getListArticle(Pageable pageable){
         return GetListArticleResponseDto.of(
-                articleRepository.findAll(pageable)
+                articleRepository.findAllWithMember(pageable)
                         .map(GetListArticleResponse::from));
 
     }
 
     @Transactional(readOnly = true)
     public ArticleResponseDto getArticle(Long articleId){
-        Article article = articleRepository.findById(articleId)
+        Article article = articleRepository.findByIdWithMember(articleId)
                 .orElseThrow(()-> BaseException.type(ArticleErrorCode.NOT_FOUND_ARTICLE));
         return ArticleResponseDto.of(article);
     }
@@ -56,8 +56,8 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public GetListArticleResponseDto searchArticle(ESearchType searchType, String keyword, Pageable pageable){
         Page<Article> articlePage = switch(searchType){
-            case TITLE -> articleRepository.findByTitleContainingIgnoreCase(keyword,pageable);
-            case NAME -> articleRepository.findByMemberNameContainingIgnoreCase(keyword,pageable);
+            case TITLE -> articleRepository.findByTitleContainingIgnoreCaseWithMember(keyword,pageable);
+            case NAME -> articleRepository.findByMemberNameContainingIgnoreCaseWithMember(keyword,pageable);
         };
 
         return GetListArticleResponseDto.of(articlePage.map(GetListArticleResponse::from));
