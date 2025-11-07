@@ -13,7 +13,11 @@ import org.sopt.assignment.member.domain.Member;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "articles")
+@Table(name = "articles", indexes = {
+        @Index(name = "idx_member_id", columnList = "member_id"),
+        @Index(name = "idx_title", columnList = "title"),
+        @Index(name = "idx_created_at", columnList = "created_at")
+})
 public class Article extends BaseTimeEntity {
 
     @Id
