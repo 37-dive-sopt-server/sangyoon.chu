@@ -2,7 +2,7 @@ package org.sopt.assignment.member.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.assignment.member.domain.Gender;
+import org.sopt.assignment.member.domain.EGender;
 import org.sopt.assignment.member.domain.Member;
 
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ public record MemberResponseDto(
 
         @JsonProperty("gender")
         @Schema(description = "대상이 되는 사용자 아이디", example = "MALE")
-        Gender gender
+        EGender gender
 ) {
 
     public static MemberResponseDto from(Member member) {

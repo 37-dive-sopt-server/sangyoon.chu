@@ -3,16 +3,16 @@ package org.sopt.assignment.member.domain;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 
-public enum Gender {
+public enum EGender {
     MALE("남자"), FEMALE("여자");
 
-    Gender(String description) {
+    EGender(String description) {
         this.description = description;
     }
 
     private final String description;
 
-    public static Gender fromInput(String input){
+    public static EGender fromInput(String input){
         return switch (input){
             case "1" -> MALE;
             case "2" -> FEMALE;

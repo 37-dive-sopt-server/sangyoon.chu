@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
         Member.validateCreation(request.name(), request.email(), request.birthday(), request.gender());
 
         Long id = IdGenerator.generateMemberId();
-        Member member = Member.create(id, request.name(), request.email(), request.birthday(), request.gender());
+        Member member = Member.create(request.name(), request.email(), request.birthday(), request.gender());
 
         memberRepository.save(member);
         log.info("회원 가입 완료 - memberId: {}, email: {}", id, maskEmail(request.email()));
@@ -65,10 +65,18 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = getMemberById(memberId);
 
-        memberRepository.delete(memberId);
+        memberRepository.delete(member);
 
         log.info("회원 삭제 완료 - memberId: {}", memberId);
         return MemberResponseDto.from(member);
+    }
+
+    public Member getMemberById(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
+                    return BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER);
+                });
     }
 
     private boolean existsMemberByEmail(String email) {
@@ -83,11 +91,4 @@ public class MemberServiceImpl implements MemberService {
         return email.charAt(0) + "***" + email.substring(atIndex);
     }
 
-    private Member getMemberById(Long memberId) {
-            return memberRepository.findById(memberId)
-                    .orElseThrow(() -> {
-                        log.warn("멤버를 찾을 수 없습니다 - memberId={}", memberId);
-                        return BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER);
-                    });
-    }
 }
