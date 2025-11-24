@@ -7,24 +7,14 @@ import org.sopt.assignment.global.security.info.UserPrincipal;
 import org.sopt.assignment.member.dto.MemberSecurityForm;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 import org.sopt.assignment.member.repository.MemberRepository;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
+public class CustomUserDetailService {
 
     private final MemberRepository memberRepository;
-
-    @Override
-    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberSecurityForm memberSecurityForm = memberRepository.findMemberSecurityFormByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 아이디입니다."));
-
-        return UserPrincipal.create(memberSecurityForm);
-    }
 
     public UserPrincipal loadUserById(Long id){
         MemberSecurityForm memberSecurityForm = memberRepository.findMemberSecurityFormById(id)

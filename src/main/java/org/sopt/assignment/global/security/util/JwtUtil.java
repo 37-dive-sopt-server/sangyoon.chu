@@ -3,10 +3,13 @@ package org.sopt.assignment.global.security.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.dto.JwtDto;
 import org.sopt.assignment.member.domain.ERole;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +17,10 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
-    @Value("${jwt.secret")
-    private String secret;
+public class JwtUtil implements InitializingBean {
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     @Value("${jwt.access-token.expiration}")
     @Getter
@@ -28,6 +32,12 @@ public class JwtUtil {
 
     private Key key;
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public Claims validateToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -36,7 +46,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String generateToken(Long id, ERole role, Integer expiration) {
+    private String generateToken(Long id, ERole role, Integer expiration) {
         Claims claims = Jwts.claims();
         claims.put(Constants.CLAIM_USER_ID, id.toString());
         if (role != null)

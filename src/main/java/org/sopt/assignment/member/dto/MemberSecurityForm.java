@@ -20,7 +20,7 @@ public interface MemberSecurityForm {
             }
             @Override
             public String getPassword() {
-                return member.getPassword();
+                return null;
             }
         };
     }

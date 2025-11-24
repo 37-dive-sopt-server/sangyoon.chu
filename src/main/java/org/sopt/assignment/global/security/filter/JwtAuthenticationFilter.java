@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.global.constants.Constants;
+import org.sopt.assignment.global.security.info.JwtAuthenticationToken;
 import org.sopt.assignment.global.security.info.JwtUserInfo;
 import org.sopt.assignment.global.security.manager.JwtAuthenticationManager;
 import org.sopt.assignment.global.security.util.HeaderUtil;
 import org.sopt.assignment.global.security.util.JwtUtil;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -41,11 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("claim: getUserId() = {}", claim.get(Constants.CLAIM_USER_ID, Long.class));
 
         JwtUserInfo jwtUserInfo = JwtUserInfo.from(claim);
-        UsernamePasswordAuthenticationToken unAuthenticatedToken =
-                new UsernamePasswordAuthenticationToken(jwtUserInfo, null, null);
 
-        UsernamePasswordAuthenticationToken authenticatedToken =
-                (UsernamePasswordAuthenticationToken) jwtAuthenticationManager.authenticate(unAuthenticatedToken);
+        JwtAuthenticationToken unAuthenticatedToken = new JwtAuthenticationToken(jwtUserInfo);
+
+        JwtAuthenticationToken authenticatedToken = (JwtAuthenticationToken) jwtAuthenticationManager.authenticate(unAuthenticatedToken);
+
         log.info("Authentication Successful: {}", authenticatedToken);
 
         authenticatedToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
