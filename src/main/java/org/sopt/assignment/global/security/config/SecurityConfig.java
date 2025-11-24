@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.security.exception.CustomAccessDeniedHandler;
 import org.sopt.assignment.global.security.exception.CustomAuthenticationEntryPointerHandler;
+import org.sopt.assignment.global.security.filter.JwtAuthenticationFilter;
+import org.sopt.assignment.global.security.filter.JwtExceptionFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,8 +45,8 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
 
                 .exceptionHandling(exception -> exception
-                        .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPointerHandler)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
 
                 .addFilterBefore(

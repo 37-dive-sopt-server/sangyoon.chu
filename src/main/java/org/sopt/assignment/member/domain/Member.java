@@ -38,12 +38,16 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EGender gender;
 
+    @Column(name = "role", nullable = false)
+    @Enumerated
+    private ERole role;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member (final String name,
                    final String email,
                    final LocalDate birthday,
-                   final EGender gender
+                   final EGender gender,
+                    final ERole role
                    ){
         this.name = name;
         this.email = email;
@@ -59,6 +63,7 @@ public class Member extends BaseTimeEntity {
                 .email(email)
                 .birthday(birthday)
                 .gender(gender)
+                .role(ERole.USER)
                 .build();
     }
 
