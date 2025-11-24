@@ -16,6 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select u.id as id, u.role as role from Member u where u.id = :id")
     Optional<MemberSecurityForm> findMemberSecurityFormById(@Param("id") Long id);
 
-    @Query("select u.id as id, u.role as role, u.password as password from Member u where u.email = :email")
-    Optional<MemberSecurityForm> findMemberSecurityFormByEmail(String email);
+    Optional<Member> findByEmail(String email);
+
 }

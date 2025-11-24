@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.global.exception.CommonErrorCode;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;

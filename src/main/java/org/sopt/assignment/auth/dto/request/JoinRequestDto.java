@@ -1,4 +1,4 @@
-package org.sopt.assignment.member.dto.request;
+package org.sopt.assignment.auth.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
-public record CreateMemberRequestDto(
+public record JoinRequestDto(
 
         @JsonProperty("name")
         @Schema(description = "등록 사용자 이름", example = "추상윤", requiredMode = REQUIRED)
