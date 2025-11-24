@@ -1,16 +1,15 @@
 package org.sopt.assignment.member.domain;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum ERole {
-    USER("일반 유저"),
-    ADMIN("관리자");
+    USER("ROLE_USER", "일반 유저"),
+    ADMIN("ROLE_ADMIN", "관리자");
 
 
-    ERole(String description) {
-        this.description = description;
-    }
+    private final String securityRole;
     private final String description;
-
 }

@@ -24,6 +24,10 @@ public record CreateMemberRequestDto(
 
         @JsonProperty("gender")
         @Schema(description = "등록 사용자 성별(MALE or FEMALE", example = "MALE", requiredMode = REQUIRED)
-        EGender gender
+        EGender gender,
+
+        @JsonProperty("password")
+        @Schema(example = "password123!")
+        String password
 ) {
 }

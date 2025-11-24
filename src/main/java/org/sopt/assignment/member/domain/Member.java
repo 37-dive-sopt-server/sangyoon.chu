@@ -25,10 +25,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "birthday", nullable = false)
@@ -37,6 +37,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
     private EGender gender;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "role", nullable = false)
     @Enumerated
@@ -47,16 +50,20 @@ public class Member extends BaseTimeEntity {
                    final String email,
                    final LocalDate birthday,
                    final EGender gender,
-                    final ERole role
+                    final ERole role,
+                    final String password
+
                    ){
         this.name = name;
         this.email = email;
         this.birthday = birthday;
         this.gender = gender;
+        this.role = role;
+        this.password = password;
     }
 
 
-    public static Member create(String name, String email, LocalDate birthday, EGender gender){
+    public static Member create(String name, String email, LocalDate birthday, EGender gender, String password) {
         validateCreation(name, email, birthday, gender);
         return Member.builder()
                 .name(name)
@@ -64,6 +71,7 @@ public class Member extends BaseTimeEntity {
                 .birthday(birthday)
                 .gender(gender)
                 .role(ERole.USER)
+                .password(password)
                 .build();
     }
 

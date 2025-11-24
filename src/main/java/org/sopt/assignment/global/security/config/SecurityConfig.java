@@ -6,6 +6,8 @@ import org.sopt.assignment.global.security.exception.CustomAccessDeniedHandler;
 import org.sopt.assignment.global.security.exception.CustomAuthenticationEntryPointerHandler;
 import org.sopt.assignment.global.security.filter.JwtAuthenticationFilter;
 import org.sopt.assignment.global.security.filter.JwtExceptionFilter;
+import org.sopt.assignment.global.security.manager.JwtAuthenticationManager;
+import org.sopt.assignment.global.security.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +24,8 @@ public class SecurityConfig {
 
     private final CustomAuthenticationEntryPointerHandler customAuthenticationEntryPointerHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtAuthenticationManager jwtAuthenticationManager;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,7 +54,7 @@ public class SecurityConfig {
                 )
 
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtUtil, jwtAuthenticationManager), LogoutFilter.class
+                        new JwtAuthenticationFilter(jwtAuthenticationManager, jwtUtil), LogoutFilter.class
                 )
 
                 .addFilterBefore(

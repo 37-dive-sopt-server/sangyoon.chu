@@ -36,7 +36,12 @@ public class MemberServiceImpl implements MemberService {
         Member.validateCreation(request.name(), request.email(), request.birthday(), request.gender());
 
         Long id = IdGenerator.generateMemberId();
-        Member member = Member.create(request.name(), request.email(), request.birthday(), request.gender());
+        Member member = Member.create(
+                request.name(),
+                request.email(),
+                request.birthday(),
+                request.gender(),
+                request.password()) ;
 
         memberRepository.save(member);
         log.info("회원 가입 완료 - memberId: {}, email: {}", id, maskEmail(request.email()));

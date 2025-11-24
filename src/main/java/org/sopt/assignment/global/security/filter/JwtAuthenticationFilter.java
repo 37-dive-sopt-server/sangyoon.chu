@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.global.constants.Constants;
 import org.sopt.assignment.global.security.info.JwtUserInfo;
+import org.sopt.assignment.global.security.manager.JwtAuthenticationManager;
 import org.sopt.assignment.global.security.util.HeaderUtil;
+import org.sopt.assignment.global.security.util.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtAuthenticationManager jwtAuthenticationManager;
+    private final JwtUtil jwtUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -32,10 +37,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info(request.getHeader(Constants.PREFIX_AUTH));
         String token = HeaderUtil.refineHeader(request, Constants.PREFIX_AUTH, Constants.BEARER);
 
-        Claims claim = jwtUtil.validate(token);
+        Claims claim = jwtUtil.validateToken(token);
         log.info("claim: getUserId() = {}", claim.get(Constants.CLAIM_USER_ID, Long.class));
 
-        JwtUserInfo jwtUserInfo = JwtUserInfo.fromClaims(claim);
+        JwtUserInfo jwtUserInfo = JwtUserInfo.from(claim);
         UsernamePasswordAuthenticationToken unAuthenticatedToken =
                 new UsernamePasswordAuthenticationToken(jwtUserInfo, null, null);
 
