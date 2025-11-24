@@ -1,4 +1,4 @@
-package org.sopt.assignment.global.config;
+package org.sopt.assignment.global.security.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.util.matcher.RequestMatcher;

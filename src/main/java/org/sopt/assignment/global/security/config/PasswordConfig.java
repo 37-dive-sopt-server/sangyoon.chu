@@ -1,4 +1,4 @@
-package org.sopt.assignment.global.config;
+package org.sopt.assignment.global.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

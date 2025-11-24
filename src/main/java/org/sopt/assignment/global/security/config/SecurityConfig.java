@@ -1,7 +1,9 @@
-package org.sopt.assignment.global.config;
+package org.sopt.assignment.global.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.assignment.global.constants.Constants;
+import org.sopt.assignment.global.security.exception.CustomAccessDeniedHandler;
+import org.sopt.assignment.global.security.exception.CustomAuthenticationEntryPointerHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,11 +11,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationEntryPointerHandler customAuthenticationEntryPointerHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,7 +44,7 @@ public class SecurityConfig {
 
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(customAccessDeniedHandler)
-                        .authenticationEntryPoint(customAuthenticationEntryPointHandler)
+                        .authenticationEntryPoint(customAuthenticationEntryPointerHandler)
                 )
 
                 .addFilterBefore(
