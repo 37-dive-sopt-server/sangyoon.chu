@@ -1,4 +1,4 @@
-package org.sopt.assignment.global.base;
+package org.sopt.assignment.global.dto;
 
 import org.springframework.data.domain.Page;
 

@@ -1,5 +1,6 @@
-package org.sopt.assignment.global.response;
+package org.sopt.assignment.global.advice;
 
+import org.sopt.assignment.global.dto.CommonApiResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

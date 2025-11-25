@@ -1,6 +1,10 @@
-package org.sopt.assignment.global.exception;
+package org.sopt.assignment.global.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.sopt.assignment.global.dto.CustomErrorResponse;
+import org.sopt.assignment.global.exception.BaseException;
+import org.sopt.assignment.global.exception.CommonErrorCode;
+import org.sopt.assignment.global.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
