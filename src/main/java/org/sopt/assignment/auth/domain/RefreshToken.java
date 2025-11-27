@@ -1,13 +1,13 @@
 package org.sopt.assignment.auth.domain;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
-@Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RedisHash(value = "token", timeToLive = 60 * 60 * 24 * 30)
 public class RefreshToken {
