@@ -9,6 +9,7 @@ import org.sopt.assignment.article.dto.request.SaveArticleRequestDto;
 import org.sopt.assignment.article.dto.response.ArticleResponseDto;
 import org.sopt.assignment.article.dto.response.GetListArticleResponseDto;
 import org.sopt.assignment.article.service.ArticleService;
+import org.sopt.assignment.global.annotation.LoginUser;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,10 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-    @PostMapping("members/{memberId}/articles")
+    @PostMapping("articles")
     public ArticleResponseDto saveArticle(
             @RequestBody @Valid SaveArticleRequestDto request,
-            @PathVariable Long memberId){
+            @LoginUser Long memberId){
 
         return articleService.saveArticle(SaveArticleCommandDto.of(request, memberId));
     }
