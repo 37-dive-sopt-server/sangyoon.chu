@@ -1,4 +1,6 @@
-package org.sopt.assignment.global.exception;
+package org.sopt.assignment.global.dto;
+
+import org.sopt.assignment.global.exception.ErrorCode;
 
 public record CustomErrorResponse (
 
