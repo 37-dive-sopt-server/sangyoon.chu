@@ -2,8 +2,10 @@ package org.sopt.assignment.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.assignment.auth.domain.RefreshToken;
 import org.sopt.assignment.auth.dto.command.LoginCommandDto;
 import org.sopt.assignment.auth.dto.request.JoinCommandDto;
+import org.sopt.assignment.auth.repository.RefreshTokenRepository;
 import org.sopt.assignment.global.dto.JwtDto;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.global.security.util.JwtUtil;
@@ -23,6 +25,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public void join(JoinCommandDto command) {
@@ -55,7 +58,24 @@ public class AuthService {
 
         matchPassword(command.password(), member.getPassword());
 
-        return jwtUtil.generateTokens(member.getId(), member.getRole());
+        JwtDto jwtDto = jwtUtil.generateTokens(member.getId(), member.getRole());
+
+        refreshTokenRepository.findById(member.getId())
+                        .ifPresentOrElse(existingToken -> {
+                                    refreshTokenRepository.deleteById(member.getId());
+                                    refreshTokenRepository.save(
+                                            RefreshToken.issueRefreshToken(member.getId(), jwtDto.refreshToken()));
+                                },
+                                () -> refreshTokenRepository.save(
+                                        RefreshToken.issueRefreshToken(member.getId(), jwtDto.refreshToken()))
+                        );
+
+        return jwtDto;
+
+    }
+
+    public void logout(Long userId){
+        refreshTokenRepository.deleteById(userId);
     }
 
     private void matchPassword(String password, String userPassword) {
