@@ -1,6 +1,7 @@
 package org.sopt.assignment.global.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.global.dto.CustomErrorResponse;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.global.exception.CommonErrorCode;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -59,10 +61,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoHandlerFoundException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<CustomErrorResponse> handleNotFoundOrTypeMismatch(Exception e) {
         if (e instanceof MethodArgumentTypeMismatchException typeMismatch) {
-           // log.warn("Type conversion failed: {} -> {}",
-            //        typeMismatch.getValue(), typeMismatch.getRequiredType().getSimpleName());
+       log.warn("Type conversion failed: {} -> {}",
+         typeMismatch.getValue(), typeMismatch.getRequiredType().getSimpleName());
         } else {
-           // log.warn("Handler not found: {}", e.getMessage());
+         log.warn("Handler not found: {}", e.getMessage());
         }
 
         return convert(CommonErrorCode.NOT_SUPPORTED_URI_ERROR);
@@ -71,7 +73,7 @@ public class GlobalExceptionHandler {
     //지원하지 않는 HTTP 메서드 처리 (405)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<CustomErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
-        // log.warn("Method not supported: {} for {}", e.getMethod(), e.getMessage());
+        log.warn("Method not supported: {} for {}", e.getMethod(), e.getMessage());
         return convert(CommonErrorCode.NOT_SUPPORTED_METHOD_ERROR);
     }
 
@@ -85,15 +87,15 @@ public class GlobalExceptionHandler {
      // JSON 파싱 실패 처리 (400)
      @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<CustomErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
-        // log.warn("JSON 파싱 실패: {}", e.getMessage());
+        log.warn("JSON 파싱 실패: {}", e.getMessage());
         return convert("요청 형식이 잘못되었습니다. 입력값을 확인해주세요.");
     }
 
     // 위의 핸들러들로 처리되지 않은 모든 RuntimeException
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<CustomErrorResponse> handleUnexpectedException(RuntimeException e, HttpServletRequest request) {
-        // log.error("Unexpected error occurred", e);
-        // log.error("Request info: {} {}", request.getMethod(), request.getRequestURI());
+        log.error("Unexpected error occurred", e);
+        log.error("Request info: {} {}", request.getMethod(), request.getRequestURI());
 
         return convert(CommonErrorCode.INTERNAL_SERVER_ERROR);
     }
@@ -113,13 +115,13 @@ public class GlobalExceptionHandler {
     }
 
     private void logError(ErrorCode code, Exception e) {
-        /*log.warn("[{}] {} | {} | {} | Message: {}",
+       log.warn("[{}] {} | {} | {} | Message: {}",
                 "BaseException",
                 code.getStatus().value(),
                 code.getErrorCode(),
                 code.getMessage(),
                 e.getMessage());
-           */
+
     }
 
 }

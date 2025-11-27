@@ -10,7 +10,6 @@ import org.sopt.assignment.global.dto.JwtDto;
 import org.sopt.assignment.global.exception.BaseException;
 import org.sopt.assignment.global.security.util.JwtUtil;
 import org.sopt.assignment.member.domain.Member;
-import org.sopt.assignment.auth.dto.request.JoinRequestDto;
 import org.sopt.assignment.member.exception.MemberErrorCode;
 import org.sopt.assignment.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,6 +52,7 @@ public class AuthService {
 
     public JwtDto login(LoginCommandDto command) {
 
+        log.info("로그인 시작");
         Member member = memberRepository.findByEmail(command.email())
                 .orElseThrow(() -> BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER));
 
@@ -60,22 +60,15 @@ public class AuthService {
 
         JwtDto jwtDto = jwtUtil.generateTokens(member.getId(), member.getRole());
 
-        refreshTokenRepository.findById(member.getId())
-                        .ifPresentOrElse(existingToken -> {
-                                    refreshTokenRepository.deleteById(member.getId());
-                                    refreshTokenRepository.save(
-                                            RefreshToken.issueRefreshToken(member.getId(), jwtDto.refreshToken()));
-                                },
-                                () -> refreshTokenRepository.save(
-                                        RefreshToken.issueRefreshToken(member.getId(), jwtDto.refreshToken()))
-                        );
+        refreshTokenRepository.save(RefreshToken.issueRefreshToken(member.getId(), jwtDto.refreshToken()));
+
 
         return jwtDto;
 
     }
 
     public void logout(Long userId){
-        refreshTokenRepository.deleteById(userId);
+        refreshTokenRepository.deleteById(userId.toString());
     }
 
     private void matchPassword(String password, String userPassword) {

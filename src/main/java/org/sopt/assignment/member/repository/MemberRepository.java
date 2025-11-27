@@ -13,7 +13,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsMemberByEmail(String email);
 
-    @Query("select u.id as id, u.role as role from Member u where u.id = :id")
+    @Query("SELECT m.id as userId, " +
+            "       m.password as password, " +
+            "       m.role as role " +
+            "FROM Member m " +
+            "WHERE m.id = :id")
     Optional<MemberSecurityForm> findMemberSecurityFormById(@Param("id") Long id);
 
     Optional<Member> findByEmail(String email);

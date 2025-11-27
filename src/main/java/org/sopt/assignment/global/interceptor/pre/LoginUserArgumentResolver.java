@@ -27,7 +27,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         if(userId == null) {
             throw BaseException.type(CommonErrorCode.INVALID_HEADER_VALUE);
         }
-
         return userId;
-    }
+        }
 }

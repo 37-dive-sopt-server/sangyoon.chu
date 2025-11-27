@@ -48,7 +48,7 @@ public class JwtUtil implements InitializingBean {
 
     private String generateToken(Long id, ERole role, Integer expiration) {
         Claims claims = Jwts.claims();
-        claims.put(Constants.CLAIM_USER_ID, id.toString());
+        claims.put(Constants.CLAIM_USER_ID, id);
         if (role != null)
             claims.put(Constants.CLAIM_USER_ROLE, role);
 

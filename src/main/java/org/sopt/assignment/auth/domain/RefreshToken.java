@@ -13,12 +13,12 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RefreshToken {
 
     @Id
-    private Long id;
+    private String id;
 
     @Indexed
     private String token;
 
-    private RefreshToken(Long id, String token) {
+    private RefreshToken(String id, String token) {
         this.id = id;
         this.token = token;
     }
@@ -27,10 +27,6 @@ public class RefreshToken {
             final Long userId,
             final String refreshToken
     ){
-        return new RefreshToken(userId, refreshToken);
-    }
-
-    public void updateRefreshToken(final String refreshToken){
-        this.token = refreshToken;
+        return new RefreshToken(userId.toString(), refreshToken);
     }
 }

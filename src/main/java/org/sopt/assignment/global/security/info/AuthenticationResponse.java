@@ -1,6 +1,5 @@
 package org.sopt.assignment.global.security.info;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONValue;

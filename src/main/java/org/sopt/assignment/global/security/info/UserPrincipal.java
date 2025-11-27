@@ -14,7 +14,6 @@ import java.util.Collections;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
 public class UserPrincipal implements UserDetails {
     private final Long userId;
     private final String password;
@@ -56,6 +55,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.password;
+        return this.userId.toString();
     }
 }
