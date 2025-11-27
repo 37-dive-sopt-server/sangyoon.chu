@@ -4,6 +4,19 @@ import org.springframework.http.HttpStatus;
 
 public enum CommonErrorCode implements ErrorCode {
 
+    // ==== 인증 에러 (4xx) ====
+    INVALID_JWT(HttpStatus.UNAUTHORIZED, "AUTH_001", "유효하지 않은 JWT입니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH_002", "JWT 토큰이 일치하지 않습니다"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_003", "자격 증명이 이루어지지 않았습니다."),
+    INVALID_USER(HttpStatus.FORBIDDEN,"AUTH_004","권한이 없는 유저의 접근입니다."),
+    INVALID_HEADER_VALUE(HttpStatus.UNAUTHORIZED,"AUTH_005", "올바르지 않은 헤더값입니다." ),
+    EXPIRED_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "AUTH_006", "만료된 토큰입니다."),
+    TOKEN_MALFORMED_ERROR(HttpStatus.UNAUTHORIZED, "AUTH_007", "토큰이 올바르지 않습니다."),
+    TOKEN_TYPE_ERROR(HttpStatus.UNAUTHORIZED, "AUTH_008", "토큰 타입이 일치하지 않거나 비어있습니다."),
+    TOKEN_UNSUPPORTED_ERROR(HttpStatus.UNAUTHORIZED, "AUTH_009", "지원하지않는 토큰입니다."),
+    TOKEN_UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED, "AUTH_010", "알 수 없는 토큰입니다."),
+
+
     // ===== 공통 에러 (4xx) =====
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON_001", "입력값 검증에 실패했습니다."),
     NOT_SUPPORTED_METHOD_ERROR(HttpStatus.METHOD_NOT_ALLOWED, "COMMON_002", "지원하지 않는 HTTP 메서드입니다."),

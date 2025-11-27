@@ -1,24 +1,19 @@
 package org.sopt.assignment.member.controller;
 
-import org.sopt.assignment.member.dto.request.CreateMemberRequestDto;
-import org.sopt.assignment.member.dto.response.MemberResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.sopt.assignment.member.dto.response.GetAllMembersResponseDto;
+import org.sopt.assignment.member.dto.response.MemberResponseDto;
 import org.sopt.assignment.member.service.MemberService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
-
-    @PostMapping("/members")
-    public MemberResponseDto createMember(@RequestBody CreateMemberRequestDto request) {
-        return memberService.join(request);
-    }
 
     @GetMapping("/members/{memberId}")
     public MemberResponseDto findMember(@PathVariable Long memberId) {
