@@ -25,10 +25,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "birthday", nullable = false)
@@ -38,27 +38,40 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EGender gender;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated
+    private ERole role;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member (final String name,
                    final String email,
                    final LocalDate birthday,
-                   final EGender gender
+                   final EGender gender,
+                    final ERole role,
+                    final String password
+
                    ){
         this.name = name;
         this.email = email;
         this.birthday = birthday;
         this.gender = gender;
+        this.role = role;
+        this.password = password;
     }
 
 
-    public static Member create(String name, String email, LocalDate birthday, EGender gender){
+    public static Member create(String name, String email, LocalDate birthday, EGender gender, String password) {
         validateCreation(name, email, birthday, gender);
         return Member.builder()
                 .name(name)
                 .email(email)
                 .birthday(birthday)
                 .gender(gender)
+                .role(ERole.USER)
+                .password(password)
                 .build();
     }
 
