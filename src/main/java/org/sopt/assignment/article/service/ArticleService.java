@@ -63,6 +63,11 @@ public class ArticleService {
         return GetListArticleResponseDto.of(articlePage.map(GetListArticleResponse::from));
     }
 
+    @Transactional(readOnly = true)
+    public Article get(Long articleId){
+        Article article = articleRepository.findByIdWithMember()
+    }
+
     private void validateDuplicateTitle(String title){
         if(articleRepository.existsByTitle(title)){
             throw BaseException.type(ArticleErrorCode.ALREADY_USED_ARTICLE_TITLE);
