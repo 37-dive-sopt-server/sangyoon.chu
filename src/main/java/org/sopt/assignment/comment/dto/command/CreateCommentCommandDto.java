@@ -7,9 +7,9 @@ public record CreateCommentCommandDto(
 
         Long articleId,
 
-        Long userId
+        Long memberId
 ) {
-    public static CreateCommentCommandDto of(CreateCommentRequestDto requestDto, Long articleId, Long userId) {
-        return new CreateCommentCommandDto(requestDto.comment(), articleId, userId);
+    public static CreateCommentCommandDto of(CreateCommentRequestDto requestDto, Long articleId, Long memberId) {
+        return new CreateCommentCommandDto(requestDto.comment(), articleId, memberId);
     }
 }

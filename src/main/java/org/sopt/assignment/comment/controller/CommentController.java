@@ -17,8 +17,8 @@ public class CommentController {
     @PostMapping
     public void createComment(@PathVariable Long articleId,
                               @RequestBody CreateCommentRequestDto request,
-                              @LoginUser Long id) {
-        commentService.createComment(CreateCommentCommandDto.of(request, id, articleId));
+                              @LoginUser Long memberId) {
+        commentService.createComment(CreateCommentCommandDto.of(request, memberId, articleId));
     }
 
 }

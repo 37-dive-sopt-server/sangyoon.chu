@@ -65,7 +65,8 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public Article get(Long articleId){
-        Article article = articleRepository.findByIdWithMember()
+        return articleRepository.findById(articleId)
+                .orElseThrow(()-> BaseException.type(ArticleErrorCode.NOT_FOUND_ARTICLE));
     }
 
     private void validateDuplicateTitle(String title){
