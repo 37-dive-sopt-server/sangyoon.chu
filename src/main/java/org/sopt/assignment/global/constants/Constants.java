@@ -22,6 +22,8 @@ public class Constants {
             "/api/health",
             "/api/health-check",
             "/api/v1/login",
-            "/api/v1/members"
+            "/api/v1/members",
+            "/chat.html",
+            "/ws/chat"
     );
 }

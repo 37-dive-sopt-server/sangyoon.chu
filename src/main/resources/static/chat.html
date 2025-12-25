@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket 채팅</title>
+    <style>
+        #messages {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>WebSocket 채팅</h1>
+
+<div id="messages"></div>
+
+<input type="text" id="messageInput" placeholder="메시지 입력" />
+<button onclick="sendMessage()">전송</button>
+<button onclick="disconnect()">연결 끊기</button>
+
+<script>
+    let socket;
+
+    // 페이지 로드 시 자동 연결
+    window.onload = function() {
+        connect();
+    };
+
+    function connect() {
+        socket = new WebSocket('ws://localhost:8080/ws/chat');
+
+        socket.onopen = function() {
+            addMessage('=== 연결됨 ===');
+        };
+
+        socket.onmessage = function(event) {
+            addMessage('받음: ' + event.data);
+        };
+
+        socket.onclose = function() {
+            addMessage('=== 연결 끊김 ===');
+        };
+
+        socket.onerror = function(error) {
+            addMessage('에러: ' + error);
+        };
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value;
+
+        if (message && socket.readyState === WebSocket.OPEN) {
+            socket.send(message);
+            addMessage('보냄: ' + message);
+            input.value = '';
+        }
+    }
+
+    function disconnect() {
+        if (socket) {
+            socket.close();
+        }
+    }
+
+    function addMessage(message) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.textContent = message;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Enter 키로 전송
+    document.getElementById('messageInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html>
