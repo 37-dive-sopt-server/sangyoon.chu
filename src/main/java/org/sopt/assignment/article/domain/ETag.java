@@ -1,7 +1,6 @@
 package org.sopt.assignment.article.domain;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public enum ETag {

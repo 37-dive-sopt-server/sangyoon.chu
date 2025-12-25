@@ -3,7 +3,6 @@ package org.sopt.assignment.article.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.assignment.article.domain.ESearchType;
-import org.sopt.assignment.article.domain.ETag;
 import org.sopt.assignment.article.dto.command.SaveArticleCommandDto;
 import org.sopt.assignment.article.dto.request.SaveArticleRequestDto;
 import org.sopt.assignment.article.dto.response.ArticleResponseDto;
