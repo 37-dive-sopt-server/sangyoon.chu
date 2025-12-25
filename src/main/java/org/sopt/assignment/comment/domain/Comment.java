@@ -18,15 +18,18 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content", length = 300)
+    @Column(name = "content", length = 300, nullable = false)
     private String content;
 
+    @Column(name = "isUpdate", nullable = false)
+    private boolean isUpdate;
+
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "article_id")
+    @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 
     @Builder
@@ -36,6 +39,7 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
         this.member = member;
         this.article = article;
+        this.isUpdate = false;
     }
 
     public static Comment create(final String content,
@@ -48,4 +52,16 @@ public class Comment extends BaseTimeEntity {
                 .build();
     }
 
+    public boolean belongsToArticle(Long articleId) {
+        return this.article.getId().equals(articleId);
+    }
+
+    public boolean isOwnedBy(Long memberId) {
+        return this.member.getId().equals(memberId);
+    }
+
+    public void update(final String content){
+        this.content = content;
+        this.isUpdate = true;
+    }
 }

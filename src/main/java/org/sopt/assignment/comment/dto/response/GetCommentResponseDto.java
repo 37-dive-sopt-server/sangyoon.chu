@@ -11,14 +11,17 @@ public record GetCommentResponseDto(
 
         LocalDateTime createdAt,
 
-        String content
+        String content,
+
+        boolean isUpdate
 ) {
     public static GetCommentResponseDto from(Comment comment) {
         return new GetCommentResponseDto(
                 comment.getId(),
                 comment.getMember().getName(),
                 comment.getCreatedAt(),
-                comment.getContent()
+                comment.getContent(),
+                comment.isUpdate()
         );
     }
 }

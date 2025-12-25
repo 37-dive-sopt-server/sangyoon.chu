@@ -1,9 +1,10 @@
 package org.sopt.assignment.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.assignment.comment.domain.Comment;
 import org.sopt.assignment.comment.dto.command.CreateCommentCommandDto;
+import org.sopt.assignment.comment.dto.command.UpdateCommentCommandDto;
 import org.sopt.assignment.comment.dto.request.CreateCommentRequestDto;
+import org.sopt.assignment.comment.dto.request.UpdateCommentRequestDto;
 import org.sopt.assignment.comment.dto.response.GetCommentResponseDto;
 import org.sopt.assignment.comment.service.CommentService;
 import org.sopt.assignment.global.annotation.LoginUser;
@@ -33,5 +34,20 @@ public class CommentController {
         Pageable pageable = PageRequest.of(page , 10);
 
         return commentService.getComments(articleId, pageable);
+    }
+
+    @PatchMapping("/{commentId}")
+    public void updateComment(@PathVariable Long articleId,
+                              @PathVariable Long commentId,
+                              @RequestBody UpdateCommentRequestDto request,
+                              @LoginUser Long memberId){
+        commentService.updateComment(UpdateCommentCommandDto.of(articleId, commentId, request, memberId));
+    }
+
+    @DeleteMapping("/{commentId}")
+    public void deleteComment(@PathVariable Long articleId,
+                              @PathVariable Long commentId,
+                              @LoginUser Long memberId){
+        commentService.deleteComment(articleId, commentId, memberId);
     }
 }
