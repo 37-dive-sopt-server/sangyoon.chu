@@ -35,12 +35,54 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public PageBaseDto<GetCommentResponseDto> getComments(Long articleId, Pageable pageable) {
+    public PageBaseDto<GetCommentResponseDto> getCommentsV1(Long articleId, Pageable pageable) {
 
         articleService.validateArticleExists(articleId);
 
         return PageBaseDto.from(commentRepository
                 .findByArticleId(articleId, pageable).map(GetCommentResponseDto::from));
+    }
+
+
+    @Transactional(readOnly = true)
+    public PageBaseDto<GetCommentResponseDto> getCommentsV2(Long articleId, Pageable pageable) {
+
+        articleService.validateArticleExists(articleId);
+
+        return PageBaseDto.from(commentRepository
+                .findCommentDtoByArticleId(articleId, pageable)
+                .map(GetCommentResponseDto::from));
+    }
+
+
+    @Transactional(readOnly = true)
+    public PageBaseDto<GetCommentResponseDto> getCommentsV3(Long articleId, Pageable pageable) {
+
+        articleService.validateArticleExists(articleId);
+
+        return PageBaseDto.from(commentRepository
+                .findCommentSummariesByArticleId(articleId, pageable)
+                .map(GetCommentResponseDto::from));
+    }
+
+
+    @Transactional(readOnly = true)
+    public PageBaseDto<GetCommentResponseDto> getCommentsV4(Long articleId, Pageable pageable) {
+
+        articleService.validateArticleExists(articleId);
+
+        return PageBaseDto.from(commentRepository
+                .findCommentsByArticleIdNative(articleId, pageable)
+                .map(GetCommentResponseDto::from));
+    }
+
+    @Transactional(readOnly = true)
+    public PageBaseDto<GetCommentResponseDto> getCommentsV5(Long articleId, Pageable pageable) {
+
+        articleService.validateArticleExists(articleId);
+
+        return PageBaseDto.from(commentRepository
+                .findCommentByArticleId(articleId, pageable).map(GetCommentResponseDto::from));
     }
 
     @Transactional

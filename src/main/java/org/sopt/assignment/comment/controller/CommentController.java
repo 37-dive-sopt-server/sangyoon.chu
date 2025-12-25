@@ -27,13 +27,50 @@ public class CommentController {
         commentService.createComment(CreateCommentCommandDto.of(request, memberId, articleId));
     }
 
-    @GetMapping
-    public PageBaseDto<GetCommentResponseDto> getComment(@PathVariable Long articleId,
+    @GetMapping("/v1")
+    public PageBaseDto<GetCommentResponseDto> getCommentV1(@PathVariable Long articleId,
                                                          @RequestParam(defaultValue = "0") int page){
 
         Pageable pageable = PageRequest.of(page , 10);
 
-        return commentService.getComments(articleId, pageable);
+        return commentService.getCommentsV1(articleId, pageable);
+    }
+
+
+    @GetMapping("/v2")
+    public PageBaseDto<GetCommentResponseDto> getCommentV2(@PathVariable Long articleId,
+                                                         @RequestParam(defaultValue = "0") int page){
+
+        Pageable pageable = PageRequest.of(page , 10);
+
+        return commentService.getCommentsV2(articleId, pageable);
+    }
+
+    @GetMapping("/v3")
+    public PageBaseDto<GetCommentResponseDto> getCommentV3(@PathVariable Long articleId,
+                                                           @RequestParam(defaultValue = "0") int page){
+
+        Pageable pageable = PageRequest.of(page , 10);
+
+        return commentService.getCommentsV3(articleId, pageable);
+    }
+
+    @GetMapping("/v4")
+    public PageBaseDto<GetCommentResponseDto> getCommentV4(@PathVariable Long articleId,
+                                                           @RequestParam(defaultValue = "0") int page){
+
+        Pageable pageable = PageRequest.of(page , 10);
+
+        return commentService.getCommentsV4(articleId, pageable);
+    }
+
+    @GetMapping("/v5")
+    public PageBaseDto<GetCommentResponseDto> getCommentV5(@PathVariable Long articleId,
+                                                           @RequestParam(defaultValue = "0") int page){
+
+        Pageable pageable = PageRequest.of(page , 10);
+
+        return commentService.getCommentsV5(articleId, pageable);
     }
 
     @PatchMapping("/{commentId}")

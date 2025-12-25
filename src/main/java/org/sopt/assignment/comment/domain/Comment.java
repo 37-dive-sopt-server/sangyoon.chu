@@ -24,13 +24,18 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "isUpdate", nullable = false)
     private boolean isUpdate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "article_id", nullable = false)
-    private Article article;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "article_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_comment_article",
+                    foreignKeyDefinition = "FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE"
+            )
+    )private Article article;
 
     @Builder
     private Comment(final String content,
