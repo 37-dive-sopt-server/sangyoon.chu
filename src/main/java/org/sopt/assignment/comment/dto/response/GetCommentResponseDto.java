@@ -44,7 +44,7 @@ public record GetCommentResponseDto(
                 commentSummary.getMemberName(),
                 commentSummary.getCreatedAt(),
                 commentSummary.getContent(),
-                commentSummary.isUpdate()
+                commentSummary.getIsUpdate()
         );
     }
 

@@ -7,6 +7,6 @@ public interface CommentSummary {
     String getContent();
     String getMemberName();
     LocalDateTime getCreatedAt();
-    boolean isUpdate();
+    boolean getIsUpdate();
 }
 

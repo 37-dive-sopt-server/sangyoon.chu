@@ -22,7 +22,7 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @Column(name = "isUpdate", nullable = false)
-    private boolean isUpdate;
+    private boolean isUpdate = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

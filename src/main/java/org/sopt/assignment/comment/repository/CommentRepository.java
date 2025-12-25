@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findCommentByArticleId(Long articleId, Pageable pageable);
 
     @Query("""
-    SELECT new org.sopt.assignment.comment.dto.response.GetCommentResponseDto(
+    SELECT new org.sopt.assignment.comment.dto.query.CommentQueryDto(
         c.id,
         c.member.name,
         c.createdAt,
