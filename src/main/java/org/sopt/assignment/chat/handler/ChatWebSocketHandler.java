@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.chat.dto.ChatMessage;
+import org.sopt.assignment.global.exception.BaseException;
+import org.sopt.assignment.global.exception.CommonErrorCode;
+import org.sopt.assignment.member.domain.Member;
+import org.sopt.assignment.member.exception.MemberErrorCode;
+import org.sopt.assignment.member.repository.MemberRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -21,6 +26,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
     private final ObjectMapper objectMapper;
+    private final MemberRepository memberRepository;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -89,6 +95,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     private String getSenderName(WebSocketSession session) {
-        return "User-"  + session.getId().substring(0, 8);
+        Long userId = (Long) session.getAttributes().get("userId");
+
+        if(userId == null) {
+            throw  BaseException.type(CommonErrorCode.INVALID_JWT);
+        }
+        return memberRepository.findById(userId)
+                .map(Member::getName)
+                .orElseThrow(() -> BaseException.type(MemberErrorCode.NOT_FOUND_MEMBER));
+
     }
 }
