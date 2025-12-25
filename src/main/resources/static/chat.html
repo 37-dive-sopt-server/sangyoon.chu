@@ -4,31 +4,73 @@
     <meta charset="UTF-8">
     <title>WebSocket 채팅</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
         #messages {
             border: 1px solid #ccc;
-            height: 300px;
+            height: 400px;
             overflow-y: scroll;
             padding: 10px;
             margin-bottom: 10px;
+            background-color: #f9f9f9;
         }
         .message {
             margin: 5px 0;
+            padding: 5px;
+        }
+        .enter {
+            color: green;
+            font-style: italic;
+        }
+        .leave {
+            color: red;
+            font-style: italic;
+        }
+        .chat {
+            color: black;
+        }
+        .sender {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .timestamp {
+            color: #999;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        #inputArea {
+            display: flex;
+            gap: 10px;
+        }
+        #messageInput {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-<h1>WebSocket 채팅</h1>
+<h1>💬 실시간 채팅</h1>
 
 <div id="messages"></div>
 
-<input type="text" id="messageInput" placeholder="메시지 입력" />
-<button onclick="sendMessage()">전송</button>
-<button onclick="disconnect()">연결 끊기</button>
+<div id="inputArea">
+    <input type="text" id="messageInput" placeholder="메시지 입력..." />
+    <button onclick="sendMessage()">전송</button>
+</div>
 
 <script>
     let socket;
 
-    // 페이지 로드 시 자동 연결
     window.onload = function() {
         connect();
     };
@@ -37,49 +79,71 @@
         socket = new WebSocket('ws://localhost:8080/ws/chat');
 
         socket.onopen = function() {
-            addMessage('=== 연결됨 ===');
+            addSystemMessage('채팅방에 연결되었습니다.');
         };
 
         socket.onmessage = function(event) {
-            addMessage('받음: ' + event.data);
+            const message = JSON.parse(event.data);
+            displayMessage(message);
         };
 
         socket.onclose = function() {
-            addMessage('=== 연결 끊김 ===');
+            addSystemMessage('연결이 끊어졌습니다.');
         };
 
         socket.onerror = function(error) {
-            addMessage('에러: ' + error);
+            addSystemMessage('에러: ' + error);
         };
     }
 
     function sendMessage() {
         const input = document.getElementById('messageInput');
-        const message = input.value;
+        const content = input.value.trim();
 
-        if (message && socket.readyState === WebSocket.OPEN) {
-            socket.send(message);
-            addMessage('보냄: ' + message);
+        if (content && socket.readyState === WebSocket.OPEN) {
+            const message = {
+                type: 'CHAT',
+                content: content
+            };
+
+            socket.send(JSON.stringify(message));
             input.value = '';
         }
     }
 
-    function disconnect() {
-        if (socket) {
-            socket.close();
-        }
-    }
-
-    function addMessage(message) {
+    function displayMessage(message) {
         const messagesDiv = document.getElementById('messages');
         const messageDiv = document.createElement('div');
-        messageDiv.className = 'message';
-        messageDiv.textContent = message;
+        messageDiv.className = 'message ' + message.type.toLowerCase();
+
+        const timestamp = new Date(message.timestamp).toLocaleTimeString();
+
+        if (message.type === 'CHAT') {
+            messageDiv.innerHTML =
+                `<span class="sender">${message.sender}:</span>` +
+                `${message.content}` +
+                `<span class="timestamp">${timestamp}</span>`;
+        } else {
+            messageDiv.innerHTML =
+                `${message.content}` +
+                `<span class="timestamp">${timestamp}</span>`;
+        }
+
         messagesDiv.appendChild(messageDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    // Enter 키로 전송
+    function addSystemMessage(text) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.style.color = '#666';
+        messageDiv.style.fontStyle = 'italic';
+        messageDiv.textContent = text;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
     document.getElementById('messageInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             sendMessage();
