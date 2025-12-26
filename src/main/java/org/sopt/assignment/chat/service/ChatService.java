@@ -33,6 +33,10 @@ public class ChatService {
 
             String memberName = memberService.getMemberById(memberId).getName();
 
+            if(message.type() == EMessageType.TYPING_START || message.type() == EMessageType.TYPING_END){
+                return ChatMessage.of(message.type(), memberName, "");
+            }
+
             ChatMessage chatMessage = ChatMessage.of(message.type(), memberName, message.content());
 
             if(message.type() == EMessageType.CHAT){

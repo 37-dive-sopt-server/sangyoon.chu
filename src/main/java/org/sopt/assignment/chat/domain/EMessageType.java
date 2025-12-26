@@ -3,5 +3,7 @@ package org.sopt.assignment.chat.domain;
 public enum EMessageType {
     CHAT,
     ENTER,
-    LEAVE
+    LEAVE,
+    TYPING_START,
+    TYPING_END
 }

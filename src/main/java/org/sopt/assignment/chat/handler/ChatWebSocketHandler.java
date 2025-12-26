@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.chat.domain.ChatMessage;
+import org.sopt.assignment.chat.domain.EMessageType;
 import org.sopt.assignment.chat.service.ChatService;
 import org.sopt.assignment.chat.service.ChatSessionManager;
 import org.springframework.stereotype.Component;
@@ -43,13 +44,15 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
+        Long memberId = getUserId(session);
         log.info("받은 메시지: {} from {}", payload, session.getId());
 
-        Long memberId = getUserId(session);
-
-        ChatMessage chatMessage = chatService.processMessage(payload, memberId);
-
-        broadcast(chatMessage);
+        try {
+            ChatMessage chatMessage = chatService.processMessage(payload, memberId);
+            broadcast(chatMessage);
+        } catch (Exception e) {
+            log.error("메시지 처리 실패: sessionId = {}", session.getId(), e);
+        }
     }
 
 
@@ -57,8 +60,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessions.remove(session);
         log.info("연결 종료: {}, 현재 접속자: {}", session.getId(), sessions.size());
-
         Long memberId = getUserId(session);
+        chatSessionManager.removeUserBySessionId(session.getId());
         ChatMessage leaveMessage = chatService.createLeaveMessage(memberId);
         broadcast(leaveMessage);
     }
