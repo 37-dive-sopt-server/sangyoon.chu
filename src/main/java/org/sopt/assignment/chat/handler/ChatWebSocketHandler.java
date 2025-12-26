@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.assignment.chat.domain.ChatMessage;
-import org.sopt.assignment.chat.domain.EMessageType;
 import org.sopt.assignment.chat.service.ChatService;
 import org.sopt.assignment.chat.service.ChatSessionManager;
 import org.springframework.stereotype.Component;
