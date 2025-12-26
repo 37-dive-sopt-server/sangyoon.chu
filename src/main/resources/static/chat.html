@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>실시간 채팅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .connection-status {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .connected {
+            color: #4ade80;
+        }
+
+        .disconnected {
+            color: #f87171;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.CHAT {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .message.ENTER,
+        .message.LEAVE {
+            text-align: center;
+            font-style: italic;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .message.ENTER {
+            color: #16a34a;
+        }
+
+        .message.LEAVE {
+            color: #dc2626;
+        }
+
+        .message.system {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            font-style: italic;
+            padding: 8px;
+        }
+
+        .sender {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .content {
+            color: #1f2937;
+            line-height: 1.5;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .typing-indicator {
+            text-align: center;
+            padding: 10px;
+            color: #667eea;
+            font-style: italic;
+            font-size: 14px;
+            animation: pulse 1.5s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .token-section {
+            padding: 20px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .token-section h3 {
+            margin-bottom: 10px;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .token-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        #tokenInput {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: monospace;
+        }
+
+        #tokenInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .token-status {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: none;
+        }
+
+        #messageInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        <h1>💬 실시간 채팅</h1>
+        <div class="connection-status">
+            상태: <span id="connectionStatus" class="disconnected">연결 안 됨</span>
+        </div>
+    </div>
+
+    <div class="token-section">
+        <h3>🔐 JWT 토큰</h3>
+        <div class="token-input-group">
+            <input type="text" id="tokenInput" placeholder="JWT 토큰을 입력하세요..." />
+            <button class="btn btn-success" onclick="saveToken()">저장</button>
+            <button class="btn btn-primary" onclick="connect()">연결</button>
+            <button class="btn btn-danger" onclick="disconnect()">종료</button>
+        </div>
+        <div id="tokenStatus" class="token-status"></div>
+    </div>
+
+    <div id="messages">
+        <div id="typingIndicator" class="typing-indicator"></div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="messageInput" placeholder="메시지를 입력하세요..." />
+        <button class="btn btn-primary" onclick="sendMessage()">전송</button>
+    </div>
+</div>
+
+<script>
+    let socket;
+    let token;
+    let typingTimer;
+    const TYPING_DELAY = 1000;  // 1초
+    const typingUsers = new Set();
+
+    // 페이지 로드 시
+    window.onload = function() {
+        token = localStorage.getItem('chatToken');
+        if (token) {
+            document.getElementById('tokenInput').value = token;
+            updateTokenStatus('저장된 토큰 로드됨', 'success');
+            loadRecentMessages();
+        }
+    };
+
+    // 최근 메시지 불러오기
+    async function loadRecentMessages() {
+        if (!token) {
+            console.log('토큰 없음');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/chat/messages?count=50', {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (response.ok) {
+                const messages = await response.json();
+
+                messages.reverse().forEach(message => {
+                    displayMessage(message);
+                });
+
+                if (messages.length > 0) {
+                    addSystemMessage(`최근 메시지 ${messages.length}개를 불러왔습니다`);
+                }
+            } else {
+                console.error('메시지 불러오기 실패:', response.status);
+            }
+        } catch (error) {
+            console.error('에러:', error);
+        }
+    }
+
+    // 토큰 저장
+    function saveToken() {
+        const input = document.getElementById('tokenInput').value.trim();
+
+        if (!input) {
+            updateTokenStatus('토큰을 입력하세요', 'error');
+            return;
+        }
+
+        token = input.replace('Bearer ', '').trim();
+        localStorage.setItem('chatToken', token);
+        updateTokenStatus('토큰이 저장되었습니다', 'success');
+
+        loadRecentMessages();
+    }
+
+    // WebSocket 연결
+    async function connect() {
+        if (!token) {
+            alert('토큰을 먼저 저장하세요!');
+            return;
+        }
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            alert('이미 연결되어 있습니다!');
+            return;
+        }
+
+        const url = 'ws://localhost:8080/ws/chat?token=' + token;
+        socket = new WebSocket(url);
+
+        socket.onopen = function() {
+            updateConnectionStatus(true);
+            addSystemMessage('채팅방에 연결되었습니다');
+        };
+
+        socket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            displayMessage(message);
+        };
+
+        socket.onclose = function() {
+            updateConnectionStatus(false);
+            addSystemMessage('연결이 종료되었습니다');
+        };
+
+        socket.onerror = function(error) {
+            updateConnectionStatus(false);
+            addSystemMessage('연결 오류가 발생했습니다');
+            updateTokenStatus('토큰을 확인하세요', 'error');
+        };
+    }
+
+    // 연결 종료
+    function disconnect() {
+        if (socket) {
+            socket.close();
+        }
+    }
+
+    // 메시지 전송
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const content = input.value.trim();
+
+        if (!content) return;
+
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            alert('먼저 연결하세요!');
+            return;
+        }
+
+        // 타이핑 종료
+        clearTimeout(typingTimer);
+        socket.send(JSON.stringify({
+            type: 'TYPING_END'
+        }));
+
+        // 메시지 전송
+        const message = {
+            type: 'CHAT',
+            content: content
+        };
+
+        socket.send(JSON.stringify(message));
+        input.value = '';
+    }
+
+    // 메시지 표시
+    function displayMessage(message) {
+        if (message.type === 'TYPING_START') {
+            showTyping(message.sender);
+            return;
+        }
+
+        if (message.type === 'TYPING_END') {
+            hideTyping(message.sender);
+            return;
+        }
+
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message ' + message.type;
+
+        const timestamp = new Date(message.timestamp).toLocaleTimeString('ko-KR');
+
+        if (message.type === 'CHAT') {
+            messageDiv.innerHTML = `
+                    <span class="sender">${message.sender}</span>
+                    <div class="content">${escapeHtml(message.content)}</div>
+                    <span class="timestamp">${timestamp}</span>
+                `;
+        } else {
+            messageDiv.innerHTML = `
+                    ${message.content}
+                    <span class="timestamp">${timestamp}</span>
+                `;
+        }
+
+        // 타이핑 인디케이터 전에 삽입
+        const typingIndicator = document.getElementById('typingIndicator');
+        messagesDiv.insertBefore(messageDiv, typingIndicator);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // 타이핑 표시
+    function showTyping(userName) {
+        typingUsers.add(userName);
+        updateTypingIndicator();
+    }
+
+    function hideTyping(userName) {
+        typingUsers.delete(userName);
+        updateTypingIndicator();
+    }
+
+    function updateTypingIndicator() {
+        const indicator = document.getElementById('typingIndicator');
+
+        if (typingUsers.size === 0) {
+            indicator.style.display = 'none';
+        } else {
+            const names = Array.from(typingUsers).join(', ');
+            indicator.textContent = `${names}님이 입력 중...`;
+            indicator.style.display = 'block';
+
+            // 스크롤 맨 아래로
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    }
+
+    // 시스템 메시지
+    function addSystemMessage(text) {
+        const messagesDiv = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message system';
+        messageDiv.textContent = `${text} (${new Date().toLocaleTimeString('ko-KR')})`;
+
+        const typingIndicator = document.getElementById('typingIndicator');
+        messagesDiv.insertBefore(messageDiv, typingIndicator);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // 연결 상태 업데이트
+    function updateConnectionStatus(connected) {
+        const statusElement = document.getElementById('connectionStatus');
+        if (connected) {
+            statusElement.textContent = '연결됨';
+            statusElement.className = 'connected';
+        } else {
+            statusElement.textContent = '연결 안 됨';
+            statusElement.className = 'disconnected';
+        }
+    }
+
+    // 토큰 상태 업데이트
+    function updateTokenStatus(message, type) {
+        const statusElement = document.getElementById('tokenStatus');
+        statusElement.textContent = message;
+        statusElement.style.color = type === 'success' ? '#10b981' : '#ef4444';
+    }
+
+    // XSS 방지
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // 입력 이벤트 (타이핑)
+    document.getElementById('messageInput').addEventListener('input', function(e) {
+        if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
+        // 타이핑 시작
+        socket.send(JSON.stringify({
+            type: 'TYPING_START'
+        }));
+
+        // 1초 후 타이핑 종료
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            socket.send(JSON.stringify({
+                type: 'TYPING_END'
+            }));
+        }, TYPING_DELAY);
+    });
+
+    // Enter 키 이벤트
+    document.getElementById('messageInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html>

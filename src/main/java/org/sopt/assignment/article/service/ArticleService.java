@@ -63,6 +63,18 @@ public class ArticleService {
         return GetListArticleResponseDto.of(articlePage.map(GetListArticleResponse::from));
     }
 
+    @Transactional(readOnly = true)
+    public Article get(Long articleId){
+        return articleRepository.findById(articleId)
+                .orElseThrow(()-> BaseException.type(ArticleErrorCode.NOT_FOUND_ARTICLE));
+    }
+
+    @Transactional(readOnly = true)
+    public void validateArticleExists(Long articleId){
+        if(!articleRepository.existsById(articleId))
+            throw BaseException.type(ArticleErrorCode.NOT_FOUND_ARTICLE);
+    }
+
     private void validateDuplicateTitle(String title){
         if(articleRepository.existsByTitle(title)){
             throw BaseException.type(ArticleErrorCode.ALREADY_USED_ARTICLE_TITLE);
