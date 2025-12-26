@@ -9,8 +9,9 @@ public class Constants {
     public static final String BEARER = "Bearer ";
     public static final String CLAIM_USER_ID = "userId";
     public static final String CLAIM_USER_ROLE = "role";
-    public static String ACCESS_COOKIE_NAME = "access_token";
-    public static String REFRESH_COOKIE_NAME = "refresh_token";
+    public static final String CHAT_MESSAGES_KEY = "chat:messages";
+    public static final int MAX_MESSAGE_COUNT = 100;
+    public static final String CONNECTED_USERS_KEY = "chat:connected_users";
 
     public static List<String> NO_NEED_AUTH = List.of(
             "/swagger",
